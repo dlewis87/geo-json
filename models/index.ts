@@ -1,5 +1,5 @@
 import { GeoJSON } from "geojson";
-import {Options} from 'node-geocoder';
+import { Options } from "node-geocoder";
 
 export interface IDistricts {
   features: GeoJSON[];

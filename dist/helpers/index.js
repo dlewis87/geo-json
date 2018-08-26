@@ -16,7 +16,7 @@ const helpers_1 = require("@turf/helpers");
 const fs = require("fs");
 const node_geocoder_1 = __importDefault(require("node-geocoder"));
 exports.createProviders = (providerOptions) => {
-    return providerOptions.map((providerOption) => {
+    return providerOptions.map(providerOption => {
         try {
             return node_geocoder_1.default(exports.createProviderOption(providerOption));
         }

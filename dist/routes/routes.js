@@ -9,7 +9,9 @@ exports.default = (app) => {
     });
     app.get("/search/:search", (req, res) => {
         const search = req.params.search;
-        helpers_1.searchProviders(helpers_1.createProviders(providerOptions), search, res).then(helpers_1.createResult(res, search)).catch(error => {
+        helpers_1.searchProviders(helpers_1.createProviders(providerOptions), search, res)
+            .then(helpers_1.createResult(res, search))
+            .catch(error => {
             console.log(error);
         });
     });

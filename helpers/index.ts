@@ -3,12 +3,19 @@ import { point } from "@turf/helpers";
 import fs = require("fs");
 import { Feature } from "geojson";
 import { Entry, Geocoder, Options, Providers } from "node-geocoder";
-import {IAddressFound, IAddressNotFound, IDistricts, IProviderOptions} from "../models";
+import {
+  IAddressFound,
+  IAddressNotFound,
+  IDistricts,
+  IProviderOptions
+} from "../models";
 import { Response } from "express";
 import NodeGeocoder from "node-geocoder";
 
-export const createProviders = (providerOptions: IProviderOptions[]): Geocoder[] => {
-  return providerOptions.map((providerOption) => {
+export const createProviders = (
+  providerOptions: IProviderOptions[]
+): Geocoder[] => {
+  return providerOptions.map(providerOption => {
     try {
       return NodeGeocoder(createProviderOption(providerOption));
     } catch (e) {
