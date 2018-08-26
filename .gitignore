@@ -108,5 +108,4 @@ typings/
 # Serverless directories
 .serverless
 /config/dev.ts
-/dist/config/dev.js
-/dist/config/dev.js.map
+/dist/*
