@@ -12,7 +12,6 @@
     "tsc": "tsc",
     "start": "node dist/index.js"
   },
-
   "author": "",
   "license": "ISC",
   "dependencies": {
