@@ -1,65 +1,21 @@
-import NodeGeocoder, { Entry } from "node-geocoder";
-import {
-  getDistricts,
-  addressNotFound,
-  addressFound,
-  createProviderOptions
-} from "../helpers";
-import { Express } from "express";
+const providerOptions = require("../config/providers");
+import { createProviders, createResult, searchProviders } from "../helpers";
+import {Express, Request, Response} from "express";
+
 const path = process.cwd();
 
-const hereOptions = createProviderOptions("here");
-const googleOptions = createProviderOptions("google");
-
 export default (app: Express) => {
-  app.get("/", function(req, res) {
+  app.get("/", function(req: Request, res: Response) {
     res.sendFile(path + "/dist/index.html");
   });
 
-  app.get("/search/:search", (req, res) => {
-    const google = NodeGeocoder(googleOptions);
+  app.get("/search/:search", (req: Request, res: Response) => {
     const search = req.params.search;
 
-    google
-      .geocode(search)
-      .then(function(result: Entry[]) {
-        if (result.length === 0) {
-          res.send(addressNotFound(search));
-          return;
-        }
-
-        const firstResult = result[0];
-        const districts = getDistricts(
-          firstResult.longitude,
-          firstResult.latitude
-        );
-
-        res.send(addressFound(search, firstResult, districts));
-      })
-      .catch(function(err: any) {
-        console.log(err);
-
-        const here = NodeGeocoder(hereOptions);
-        here
-          .geocode(search)
-          .then(function(result: Entry[]) {
-            if (result.length === 0) {
-              res.send(addressNotFound(search));
-              return;
-            }
-
-            const firstResult = result[0];
-            const districts = getDistricts(
-              firstResult.longitude,
-              firstResult.latitude
-            );
-
-            res.send(addressFound(search, firstResult, districts));
-          })
-          .catch(function(err: any) {
-            console.log(err);
-            res.sendStatus(503);
-          });
-      });
+    searchProviders(createProviders(providerOptions), search, res).then(
+      createResult(res, search)
+    ).catch(error => {
+      console.log(error);
+    });
   });
 };

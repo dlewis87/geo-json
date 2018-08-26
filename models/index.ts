@@ -1,4 +1,5 @@
 import { GeoJSON } from "geojson";
+import {Options} from 'node-geocoder';
 
 export interface IDistricts {
   features: GeoJSON[];
@@ -23,4 +24,9 @@ export interface ILocation {
   lat?: number;
   lng?: number;
   serviceArea: string[];
+}
+
+export interface IProviderOptions {
+  name: string;
+  options: Options;
 }

@@ -1,27 +1,54 @@
 import pointsWithinPolygon from "@turf/points-within-polygon";
 import { point } from "@turf/helpers";
-const keys = require("../config/keys");
 import fs = require("fs");
 import { Feature } from "geojson";
-import { Entry, Options, Providers } from "node-geocoder";
-import { IAddressFound, IAddressNotFound, IDistricts } from "../models";
+import { Entry, Geocoder, Options, Providers } from "node-geocoder";
+import {IAddressFound, IAddressNotFound, IDistricts, IProviderOptions} from "../models";
+import { Response } from "express";
+import NodeGeocoder from "node-geocoder";
 
-export const createProviderOptions = (provider: string): Options => {
-  let options = {};
+export const createProviders = (providerOptions: IProviderOptions[]): Geocoder[] => {
+  return providerOptions.map((providerOption) => {
+    try {
+      return NodeGeocoder(createProviderOption(providerOption));
+    } catch (e) {
+      console.log(e);
+    }
+  });
+};
 
-  switch (provider) {
-    case "google":
-      options = { apiKey: keys.google_maps_key };
-      break;
-    case "here":
-      options = { appId: keys.here_app_id, appCode: keys.here_app_code };
-      break;
+export const createProviderOption = (provider: IProviderOptions): Options => {
+  return {
+    ...provider.options,
+    provider: <Providers>provider.name,
+    httpAdapter: "https"
+  };
+};
+
+export const searchProviders = async (
+  providers: Geocoder[],
+  search: string,
+  res: Response
+): Promise<Entry[]> => {
+  for (const provider of providers) {
+    if (provider) {
+      const result = await provider.geocode(search);
+
+      if (result.length) {
+        return result;
+      }
+    }
   }
 
-  return {
-    ...options,
-    provider: <Providers>provider,
-    httpAdapter: "https"
+  res.send(addressNotFound(search));
+  return Promise.reject("Address not found by any provider");
+};
+
+export const createResult = (res: Response, search: string) => {
+  return (result: Entry[]) => {
+    const districts = getDistricts(result[0].longitude, result[0].latitude);
+
+    res.send(addressFound(search, result[0], districts));
   };
 };
 
@@ -42,7 +69,6 @@ export const getDistricts = (lng: number, lat: number): string[] => {
   return features
     .filter((feature: Feature) => {
       const result = pointsWithinPolygon(point([lng, lat]), feature);
-
       return result.features.length > 0;
     })
     .map((feature: Feature) => feature.properties.Name);
