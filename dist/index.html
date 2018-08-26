@@ -1,0 +1,61 @@
+<!DOCTYPE html>
+
+<html>
+
+<head>
+    <title></title>
+    <style>
+        .data {
+            white-space: pre;
+        }
+    </style>
+</head>
+
+<body>
+<div>
+    <h2>Example usage</h2>
+    <h3>With Postcode:</h3>
+    <a href="https://sheltered-dawn-83931.herokuapp.com/search/SW1A%202AA">
+        https://sheltered-dawn-83931.herokuapp.com/search/SW1A%202AA
+    </a>
+    <h3>With Address</h3>
+    <a href="https://sheltered-dawn-83931.herokuapp.com/search/10%20downing%20street%20london">
+        https://sheltered-dawn-83931.herokuapp.com/search/10%20downing%20street%20london
+    </a>
+
+    <h2>Example output</h2>
+    <code class="data">
+        {
+            status: "OK",
+            search: "10 downing street london",
+            location: {
+                addressNumber: "10",
+                addressStreet: "Downing Street",
+                city: "London",
+                postcode: "SW1A 2AA",
+                lat: 51.5033635,
+                lng: -0.1276248,
+                serviceArea: [
+                    "LONCENTRAL"
+                ]
+            }
+        }
+    </code>
+
+    <h3>Unknown Address:</h3>
+    <a href="https://sheltered-dawn-83931.herokuapp.com/search/abcdef123456">
+        https://sheltered-dawn-83931.herokuapp.com/search/abcdef123456
+    </a>
+
+    <h2>Example output</h2>
+    <code class="data">
+        {
+            status: "NOT_FOUND",
+            search: "abcdef123456"
+        }
+    </code>
+</div>
+
+</body>
+
+</html>

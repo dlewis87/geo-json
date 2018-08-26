@@ -2,6 +2,7 @@ import NodeGeocoder from "node-geocoder";
 const keys = require("../config/keys");
 import { getDistricts } from "../helpers";
 import { Express } from "express";
+const path = process.cwd();
 
 // const hereOptions = {
 //   provider: "here",
@@ -19,6 +20,11 @@ const googleOptions = {
 };
 
 export default (app: Express) => {
+    app.get('/',function (req, res) {
+        res.sendFile(path + '/dist/index.html');
+    });
+
+
   app.get("/search/:postcode", (req, res) => {
     // @ts-ignore
     const google = NodeGeocoder(googleOptions);

@@ -6,6 +6,7 @@ Object.defineProperty(exports, "__esModule", { value: true });
 const node_geocoder_1 = __importDefault(require("node-geocoder"));
 const keys = require("../config/keys");
 const helpers_1 = require("../helpers");
+const path = process.cwd();
 // const hereOptions = {
 //   provider: "here",
 //   httpAdapter: "https",
@@ -20,6 +21,9 @@ const googleOptions = {
     apiKey: keys.google_maps_key
 };
 exports.default = (app) => {
+    app.get('/', function (req, res) {
+        res.sendFile(path + '/dist/index.html');
+    });
     app.get("/search/:postcode", (req, res) => {
         // @ts-ignore
         const google = node_geocoder_1.default(googleOptions);
