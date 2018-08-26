@@ -4,59 +4,46 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
 };
 Object.defineProperty(exports, "__esModule", { value: true });
 const node_geocoder_1 = __importDefault(require("node-geocoder"));
-const keys = require("../config/keys");
 const helpers_1 = require("../helpers");
 const path = process.cwd();
-// const hereOptions = {
-//   provider: "here",
-//   httpAdapter: "https",
-//   appId: keys.here_app_id,
-//   appCode: keys.here_app_code,
-//   method: "GET",
-//   formatter: null
-// };
-const googleOptions = {
-    provider: "google",
-    httpAdapter: "https",
-    apiKey: keys.google_maps_key
-};
+const hereOptions = helpers_1.createProviderOptions("here");
+const googleOptions = helpers_1.createProviderOptions("google");
 exports.default = (app) => {
-    app.get('/', function (req, res) {
-        res.sendFile(path + '/dist/index.html');
+    app.get("/", function (req, res) {
+        res.sendFile(path + "/dist/index.html");
     });
-    app.get("/search/:postcode", (req, res) => {
-        // @ts-ignore
+    app.get("/search/:search", (req, res) => {
         const google = node_geocoder_1.default(googleOptions);
-        // const here = NodeGeocoder(hereOptions);
-        const postcode = req.params.postcode;
+        const search = req.params.search;
         google
-            .geocode(postcode)
+            .geocode(search)
             .then(function (result) {
             if (result.length === 0) {
-                res.send({
-                    status: "NOT_FOUND",
-                    search: postcode
-                });
+                res.send(helpers_1.addressNotFound(search));
                 return;
             }
             const firstResult = result[0];
             const districts = helpers_1.getDistricts(firstResult.longitude, firstResult.latitude);
-            res.send({
-                status: "OK",
-                search: postcode,
-                location: {
-                    addressNumber: firstResult.streetNumber || null,
-                    addressStreet: firstResult.streetName || null,
-                    city: firstResult.city || null,
-                    postcode: firstResult.zipcode || null,
-                    lat: firstResult.latitude || null,
-                    lng: firstResult.longitude || null,
-                    serviceArea: districts
-                }
-            });
+            res.send(helpers_1.addressFound(search, firstResult, districts));
         })
             .catch(function (err) {
             console.log(err);
+            const here = node_geocoder_1.default(hereOptions);
+            here
+                .geocode(search)
+                .then(function (result) {
+                if (result.length === 0) {
+                    res.send(helpers_1.addressNotFound(search));
+                    return;
+                }
+                const firstResult = result[0];
+                const districts = helpers_1.getDistricts(firstResult.longitude, firstResult.latitude);
+                res.send(helpers_1.addressFound(search, firstResult, districts));
+            })
+                .catch(function (err) {
+                console.log(err);
+                res.sendStatus(503);
+            });
         });
     });
 };
