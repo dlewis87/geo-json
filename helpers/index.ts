@@ -64,12 +64,12 @@ export const addressFound = (
     status: "OK",
     search: search,
     location: {
-      addressNumber: result.streetNumber,
-      addressStreet: result.streetName,
-      city: result.city,
-      postcode: result.zipcode,
-      lat: result.latitude,
-      lng: result.longitude,
+      addressNumber: result.streetNumber || null,
+      addressStreet: result.streetName || null,
+      city: result.city || null,
+      postcode: result.zipcode || null,
+      lat: result.latitude || null,
+      lng: result.longitude || null,
       serviceArea: districts
     }
   };
