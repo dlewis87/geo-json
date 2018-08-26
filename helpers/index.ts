@@ -7,13 +7,13 @@ import {
   IAddressFound,
   IAddressNotFound,
   IDistricts,
-  IProviderOptions
+  IProviderOption
 } from "../models";
 import { Response } from "express";
 import NodeGeocoder from "node-geocoder";
 
 export const createProviders = (
-  providerOptions: IProviderOptions[]
+  providerOptions: IProviderOption[]
 ): Geocoder[] => {
   return providerOptions.map(providerOption => {
     try {
@@ -24,10 +24,10 @@ export const createProviders = (
   });
 };
 
-export const createProviderOption = (provider: IProviderOptions): Options => {
+export const createProviderOption = (providerOption: IProviderOption): Options => {
   return {
-    ...provider.options,
-    provider: <Providers>provider.name,
+    ...providerOption.options,
+    provider: <Providers>providerOption.name,
     httpAdapter: "https"
   };
 };

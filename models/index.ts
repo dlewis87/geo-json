@@ -26,7 +26,7 @@ export interface ILocation {
   serviceArea: string[];
 }
 
-export interface IProviderOptions {
+export interface IProviderOption {
   name: string;
   options: Options;
 }

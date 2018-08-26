@@ -5,8 +5,8 @@ import { Express, Request, Response } from "express";
 const path = process.cwd();
 
 export default (app: Express) => {
-  app.get("/", function(req: Request, res: Response) {
-    res.sendFile(path + "/dist/index.html");
+  app.get("/", (req: Request, res: Response) =>  {
+    res.sendFile(`${path}/index.html`);
   });
 
   app.get("/search/:search", (req: Request, res: Response) => {
