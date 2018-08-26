@@ -1,5 +1,5 @@
 import pointsWithinPolygon from "@turf/points-within-polygon";
-import { point } from "@turf/helpers";
+import {point, Polygon} from "@turf/helpers";
 import fs = require("fs");
 import { Feature } from "geojson";
 import { Entry, Geocoder, Options, Providers } from "node-geocoder";
@@ -74,7 +74,7 @@ export const getDistricts = (lng: number, lat: number): string[] => {
   const features = districts.features;
 
   return features
-    .filter((feature: Feature) => {
+    .filter((feature: Feature<Polygon>) => {
       const result = pointsWithinPolygon(point([lng, lat]), feature);
       return result.features.length > 0;
     })
