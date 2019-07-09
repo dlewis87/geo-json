@@ -30,6 +30,6 @@
     "@types/googlemaps": "^3.30.12",
     "@types/node": "^10.9.2",
     "@types/node-geocoder": "^3.19.0",
-    "typescript": "^3.0.1"
+    "typescript": "^3.5.3"
   }
 }
