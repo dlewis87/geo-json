@@ -21,7 +21,7 @@
     "@turf/polygonize": "^5.1.5",
     "@types/geojson": "^7946.0.4",
     "body-parser": "^1.18.3",
-    "express": "^4.16.3",
+    "express": "^4.17.3",
     "node-geocoder": "^3.22.0",
     "nodemon": "^1.18.3"
   },
